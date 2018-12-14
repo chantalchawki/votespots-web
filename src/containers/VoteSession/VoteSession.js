@@ -1,25 +1,44 @@
 import React, { Component } from 'react';
 import VoteBar from '../../components/VoteBar/VoteBar';
+import axios from 'axios';
 
 export default class VoteSession extends Component {
   state = {
     id: '',
-    name: 'Vote 1',
-    headers: ['Header 1', 'Header 2'],
-    results: [40, 60]
+    name: '',
+    headers: [],
+    results: []
   };
 
-  componentDidMount() {
-    this.setState({ id: this.props.match.params.id });
-
-    // Integrate with Backend
-
+  async componentDidMount() {
+    await this.setState({ id: this.props.match.params.id });
+    try {
+      const vote = (await axios.get(`/api/vote/${this.state.id}`)).data;
+      this.setState({
+        name: vote.name,
+        headers: vote.headers,
+        results: vote.results
+      });
+    } catch (error) {
+      console.log(error);
+    }
     // Connect to the Socket
   }
 
-  submitVote = header => {
+  submitVote = async header => {
+    const idCheck = localStorage.getItem(this.state.id);
+    if (idCheck) {
+      alert('You cannot vote twice');
+      return;
+    }
+
     // integrate with Backend
-    console.log('Clicked on', this.state.id, header);
+    try {
+      await axios.post(`/api/vote/${this.state.id}/${header}`);
+      localStorage.setItem(this.state.id, true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {

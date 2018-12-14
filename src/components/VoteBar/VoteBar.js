@@ -1,7 +1,7 @@
 import React from 'react';
 
 const VoteBar = ({ header, result, totalVotes, submitVote }) => {
-  const percentage = (result / totalVotes) * 100;
+  const percentage = Math.round((result / (totalVotes || 1)) * 100);
   return (
     <div className="my-5">
       <p style={{ lineHeight: 0 }}>{header}</p>

@@ -1,22 +1,36 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default class Login extends Component {
+import { loginUser } from '../../actions/authActions';
+
+class Login extends Component {
   state = {
     email: '',
     password: ''
   };
-
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/');
+    }
+  }
   onChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
   };
 
-  onSubmit = event => {
+  onSubmit = async event => {
     event.preventDefault();
 
     // Integrate with Backend
+    this.props.loginUser(
+      {
+        email: this.state.email,
+        password: this.state.password
+      },
+      this.props.history
+    );
   };
 
   render() {
@@ -63,3 +77,12 @@ export default class Login extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(withRouter(Login));

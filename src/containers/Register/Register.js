@@ -1,17 +1,35 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import axios from 'axios';
+import { connect } from 'react-redux';
 
-export default class Register extends Component {
+class Register extends Component {
   state = {
     name: '',
     email: '',
     password: ''
   };
 
-  onSubmit = event => {
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/');
+    }
+  }
+
+  onSubmit = async event => {
     event.preventDefault();
 
     // Integrate with Backend
+    try {
+      await axios.post('/api/register', {
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password
+      });
+      this.props.history.push('/login');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   onChange = event => {
@@ -72,3 +90,12 @@ export default class Register extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(withRouter(Register));

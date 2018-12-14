@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import VoteCard from '../../components/VoteCard/VoteCard';
+import axios from 'axios';
 
 export default class Home extends Component {
   state = {
-    votingSessions: [
-      { id: 1, name: 'Voting 1' },
-      { id: 2, name: 'Voting 2' },
-      { id: 3, name: 'Voting 3' },
-      { id: 4, name: 'Voting 4' },
-      { id: 5, name: 'Voting 5' },
-      { id: 6, name: 'Voting 6' }
-    ]
+    votingSessions: []
   };
+
+  async componentDidMount() {
+    try {
+      const results = await axios.get('/api/votes');
+      this.setState({
+        votingSessions: results.data
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   render() {
     const { votingSessions } = this.state;
@@ -23,7 +28,7 @@ export default class Home extends Component {
         ) : (
           <div class="card-deck">
             {votingSessions.map(vote => (
-              <VoteCard id={vote.id} name={vote.name} />
+              <VoteCard id={vote._id} name={vote.name} />
             ))}
           </div>
         )}
