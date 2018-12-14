@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class CreateVote extends Component {
   state = {
@@ -10,10 +11,21 @@ export default class CreateVote extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  onSubmit = event => {
+  onSubmit = async event => {
     event.preventDefault();
-
     // Integrate with Backend
+    this.setState({
+      headers: this.state.headers.split(';')
+    });
+    try {
+      const result = await axios.post('/api/vote/', {
+        name: this.state.name,
+        headers: this.state.headers.split(';')
+      });
+      console.log(this.state.headers);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {
