@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import message from 'antd/lib/message';
 
 class Register extends Component {
   state = {
@@ -27,7 +28,9 @@ class Register extends Component {
         password: this.state.password
       });
       this.props.history.push('/login');
+      message.success('Registered Successfully, Please Login.');
     } catch (error) {
+      message.error(error.response.data.message || 'An Error Occured.');
       console.log(error);
     }
   };

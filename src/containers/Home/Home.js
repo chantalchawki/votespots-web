@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import VoteCard from '../../components/VoteCard/VoteCard';
 import axios from 'axios';
+import message from 'antd/lib/message';
+
+import VoteCard from '../../components/VoteCard/VoteCard';
 
 export default class Home extends Component {
   state = {
@@ -14,6 +16,7 @@ export default class Home extends Component {
         votingSessions: results.data
       });
     } catch (error) {
+      message.error('An error occured while getting latest votes.');
       console.log(error);
     }
   }

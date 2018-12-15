@@ -1,6 +1,7 @@
 import Cookies from 'universal-cookie';
 import * as jwt_decode from 'jwt-decode';
 import axios from 'axios';
+import message from 'antd/lib/message';
 
 import { SET_CURRENT_USER } from './types';
 import { setAuthToken } from '../utils/authToken';
@@ -19,8 +20,10 @@ export const loginUser = (payload, history) => async dispatch => {
       payload: decodedUser
     });
 
+    message.success(`Welcome back, ${decodedUser.name}`);
     history.push('/');
   } catch (error) {
+    message.error(error.response.data.message || 'An Error Occured.');
     console.log('An Error occured.', error);
   }
 };

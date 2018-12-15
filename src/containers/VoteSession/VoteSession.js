@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import VoteBar from '../../components/VoteBar/VoteBar';
 import axios from 'axios';
+import message from 'antd/lib/message';
+
+import VoteBar from '../../components/VoteBar/VoteBar';
 
 export default class VoteSession extends Component {
   state = {
@@ -20,6 +22,7 @@ export default class VoteSession extends Component {
         results: vote.results
       });
     } catch (error) {
+      message.error('An error occured while getting the vote data.');
       console.log(error);
     }
     // Connect to the Socket
@@ -28,7 +31,7 @@ export default class VoteSession extends Component {
   submitVote = async header => {
     const idCheck = localStorage.getItem(this.state.id);
     if (idCheck) {
-      alert('You cannot vote twice');
+      message.error('You cannot vote twice.');
       return;
     }
 
@@ -36,7 +39,9 @@ export default class VoteSession extends Component {
     try {
       await axios.post(`/api/vote/${this.state.id}/${header}`);
       localStorage.setItem(this.state.id, true);
+      message.success('Thank you for voting!');
     } catch (error) {
+      message.success('An Error Occured.');
       console.log(error);
     }
   };
