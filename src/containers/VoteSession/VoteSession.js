@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import message from 'antd/lib/message';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import VoteBar from '../../components/VoteBar/VoteBar';
 
-export default class VoteSession extends Component {
+class VoteSession extends Component {
   state = {
     id: '',
     name: '',
@@ -25,12 +27,15 @@ export default class VoteSession extends Component {
       message.error('An error occured while getting the vote data.');
       console.log(error);
     }
+
     // Connect to the Socket
   }
 
   submitVote = async header => {
-    const idCheck = localStorage.getItem(this.state.id);
-    if (idCheck) {
+    const localStorageVote = localStorage.getItem(this.state.id) || '';
+    const voters = localStorageVote.split(';');
+
+    if (voters.indexOf(this.props.auth.user.id || 'guest') !== -1) {
       message.error('You cannot vote twice.');
       return;
     }
@@ -38,7 +43,8 @@ export default class VoteSession extends Component {
     // integrate with Backend
     try {
       await axios.post(`/api/vote/${this.state.id}/${header}`);
-      localStorage.setItem(this.state.id, true);
+      voters.push(this.props.auth.user.id || 'guest');
+      localStorage.setItem(this.state.id, voters.join(';'));
       message.success('Thank you for voting!');
     } catch (error) {
       message.success('An Error Occured.');
@@ -65,3 +71,9 @@ export default class VoteSession extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(withRouter(VoteSession));

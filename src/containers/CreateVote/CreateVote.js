@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import message from 'antd/lib/message';
 
 export default class CreateVote extends Component {
   state = {
@@ -19,7 +20,10 @@ export default class CreateVote extends Component {
         name: this.state.name,
         headers: this.state.headers.split(';')
       });
+      message.success('Your vote is created successfully.');
+      this.props.history.push(`/vote/${result.data._id}`);
     } catch (error) {
+      message.error(error.response.data.message || 'An Error Occured.');
       console.log(error);
     }
   };
