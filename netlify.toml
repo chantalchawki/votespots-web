@@ -1,0 +1,8 @@
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[context.production.environment]
+  REACT_APP_SERVER_URL = "https://votespots-api.herokuapp.com"
+  REACT_APP_SOCKET_PORT = 4000
