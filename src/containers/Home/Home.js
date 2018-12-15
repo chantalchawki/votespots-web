@@ -29,9 +29,9 @@ export default class Home extends Component {
         {votingSessions.length === 0 ? (
           <p>There are no voting sessions</p>
         ) : (
-          <div class="card-deck">
-            {votingSessions.map(vote => (
-              <VoteCard id={vote._id} name={vote.name} />
+          <div className="card-deck">
+            {votingSessions.map((vote, index) => (
+              <VoteCard key={index} id={vote._id} name={vote.name} />
             ))}
           </div>
         )}

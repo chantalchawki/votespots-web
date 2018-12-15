@@ -39,5 +39,6 @@ export const logoutUser = history => dispatch => {
 
   setAuthToken();
 
+  message.success('Au revoir 👋🏻');
   history.push('/');
 };
