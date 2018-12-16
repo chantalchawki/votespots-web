@@ -42,11 +42,7 @@ class VoteSession extends Component {
     }
 
     // Connect to the Socket
-<<<<<<< HEAD
     const host = process.env.REACT_APP_SERVER_URL || 'http://localhost:3000';
-=======
-    const host = `${process.env.REACT_APP_SERVER_URL || 'http://localhost'}:${process.env.REACT_APP_SOCKET_PORT}`;
->>>>>>> 87f0a7617e966b602ad79c14678f1c7102cda8d2
     this.socket = io(host);
     this.socket.on('connect', () => {
       this.socket.emit('room', this.state.id);
