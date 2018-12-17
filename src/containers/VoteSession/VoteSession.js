@@ -54,6 +54,10 @@ class VoteSession extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.socket.close();
+  }
+
   submitVote = async header => {
     const localStorageVote = localStorage.getItem(this.state.id) || '';
     const voters = localStorageVote.split(';');
