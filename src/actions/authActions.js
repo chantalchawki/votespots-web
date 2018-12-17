@@ -13,7 +13,7 @@ export const loginUser = (payload, history) => async dispatch => {
 
     const cookies = new Cookies();
     cookies.set('Authorization', token);
-
+    setAuthToken(token);
     const decodedUser = jwt_decode(token);
     dispatch({
       type: SET_CURRENT_USER,
